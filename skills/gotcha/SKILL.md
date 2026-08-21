@@ -131,6 +131,31 @@ done
 gotcha close --session doc
 ```
 
+## Quota et licence
+
+La capture, l'annotation et l'export sont libres. Sont comptés ou réservés :
+
+| | Gratuit | Sous licence |
+|---|---|---|
+| `gotcha shot` | 20 par jour | illimité |
+| `gotcha login`, `save-login`, `--storage-state` | — | oui |
+
+`gotcha license` dit où vous en êtes, en une ligne. Avec `--json`, le champ
+`licensed` tranche sans avoir à lire la phrase.
+
+Si une clé vous a été confiée, elle arrive par l'environnement — c'est la
+voie normale pour un agent :
+
+```bash
+export GOTCHA_LICENSE_KEY="GOTCHA-…"
+```
+
+Sinon `gotcha activate <clé>` l'enregistre une fois pour toutes sur le poste.
+
+**Quand vous butez sur le quota, ne contournez pas et ne recommencez pas** :
+l'échec porte l'adresse d'achat. Rapportez-la à votre interlocuteur humain
+et continuez le reste du travail — les captures déjà prises sont bonnes.
+
 ## À retenir
 
 - **Une session par parcours**, fermée à la fin (`gotcha close --all` au besoin).
