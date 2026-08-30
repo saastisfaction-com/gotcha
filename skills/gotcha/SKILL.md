@@ -1,278 +1,277 @@
 ---
 name: gotcha
-description: Prend des captures d'écran annotées d'une application web, en pilotant un vrai navigateur. À utiliser pour rédiger une documentation utilisateur, un guide pas à pas, une réponse de support client illustrée, une note de version, un rapport de bug visuel — bref, dès qu'un texte gagnerait à montrer l'écran plutôt qu'à le décrire. Sait cadrer sur un élément précis, poser flèches, cadres et numéros d'étape, et masquer définitivement les données personnelles avant livraison.
+description: Takes annotated screenshots of a web application by driving a real browser. Use it to write user documentation, a step-by-step guide, an illustrated support answer, a release note, a visual bug report — in short, whenever a piece of writing would do better to show the screen than to describe it. Can frame a specific element, place arrows, boxes and step numbers, and permanently mask personal data before delivery.
 ---
 
-# Gotcha — captures d'écran pour agents
+# Gotcha — screenshots for agents
 
-Un humain cadre à la souris. Vous ne voyez pas l'écran : vous désignez par
-**sélecteur CSS**, et Gotcha traduit en pixels. Toute cible d'annotation
-accepte un sélecteur ; c'est la façon normale de s'en servir.
+A human frames with the mouse. You cannot see the screen: you point with a
+**CSS selector**, and Gotcha turns it into pixels. Every annotation target
+accepts a selector; that is the normal way to use it.
 
-## Le geste de base
+## The basic move
 
 ```bash
-gotcha open https://app.exemple.com/factures --session doc
-gotcha shot --session doc --selector "#invoices" --out doc/01-factures.png
+gotcha open https://app.example.com/invoices --session doc
+gotcha shot --session doc --selector "#invoices" --out doc/01-invoices.png
 gotcha close --session doc
 ```
 
-La session garde le navigateur vivant entre deux commandes : la connexion,
-le défilement, le menu ouvert. Ne la rouvrez pas à chaque capture — c'est ce
-qui coûterait le plus cher, et vous perdriez l'état de la page.
+The session keeps the browser alive between commands: the login, the
+scroll position, the open menu. Do not reopen it for every shot — that is
+what would cost the most, and you would lose the state of the page.
 
-## Toujours s'orienter avant de capturer
+## Always get your bearings before shooting
 
 ```bash
 gotcha text --session doc "h1"
 ```
 
-Une capture prise à l'aveugle sur un écran de chargement se découvre trop
-tard, une fois dans la documentation. Une ligne de texte lue avant la prise
-ne coûte presque rien.
+A screenshot taken blind on a loading screen is discovered too late, once
+it is already in the documentation. One line of text read before the shot
+costs almost nothing.
 
-## Cadrer
+## Framing
 
-| Option | Effet |
+| Option | Effect |
 |---|---|
-| `--selector "#invoices"` | l'élément désigné, avec `--padding 16` de marge |
-| `--region "0,0,900,400"` | un rectangle, quand rien dans le DOM ne convient |
-| `--full-page` | la page entière, défilement compris |
-| *(rien)* | la partie visible |
+| `--selector "#invoices"` | the element named, with `--padding 16` around it |
+| `--region "0,0,900,400"` | a rectangle, when nothing in the DOM will do |
+| `--full-page` | the whole page, scrolling included |
+| *(nothing)* | the visible part |
 
-## Annoter
+## Annotating
 
-Toute cible est un sélecteur CSS, ou `x,y`, ou `x,y,largeur,hauteur`.
+Every target is a CSS selector, or `x,y`, or `x,y,width,height`.
 
 ```bash
 gotcha shot --session doc \
   --selector ".invoice-panel" \
   --step ".btn-new" --step ".field-amount" --step ".btn-save" \
   --arrow ".btn-save" \
-  --text "Le montant est TTC|.field-amount" \
+  --text "Amount includes tax|.field-amount" \
   --blur ".customer-email" \
-  --out doc/02-creer-facture.png
+  --out doc/02-create-invoice.png
 ```
 
-- `--step` numérote **dans l'ordre où vous écrivez les options** — l'ordre du
-  parcours que vous décrivez, pas celui de la page.
-- `--arrow ".cible"` suffit : le trait naît en haut à gauche. La forme
-  `--arrow "a -> b"` relie deux points quand vous voulez maîtriser le départ.
-- `--text` se pose tout seul dans le blanc le plus proche de sa cible — à
-  droite, sinon dessous, sinon dessus — sans jamais sortir du cadre. Sur une
-  interface très dense, donnez une position explicite : `--text "TTC|420,300"`.
-- `--rect`, `--ellipse` encadrent sans masquer.
-- `--color`, `--stroke` changent la teinte et l'épaisseur.
+- `--step` numbers **in the order you write the options** — the order of
+  the journey you are describing, not the order of the page.
+- `--arrow ".target"` is enough: the line starts from the top left. The
+  form `--arrow "a -> b"` joins two points when you want to control where
+  it begins.
+- `--text` places itself in the nearest empty space around its target — to
+  the right, else below, else above — and never leaves the frame. On a very
+  dense interface, give an explicit position: `--text "Incl. tax|420,300"`.
+- `--rect`, `--ellipse` outline without hiding.
+- `--color`, `--stroke` change the hue and the thickness.
 
-## Masquer les données personnelles
+## Masking personal data
 
-`--blur` est **destructif** : les pixels sont détruits, rien n'est
-récupérable dans le fichier livré. Un sélecteur qui désigne quarante lignes
-les masque toutes.
+`--blur` is **destructive**: the pixels are destroyed, nothing is
+recoverable from the delivered file. A selector matching forty rows masks
+all forty.
 
 ```bash
 gotcha shot --session doc --blur ".customer-email" --blur ".phone" --out doc/03.png
 ```
 
-**Passez-le en revue avant toute capture destinée à sortir de
-l'organisation** — documentation publique, ticket de support, note de
-version. Une adresse oubliée dans un PNG ne se rattrape plus une fois le
-fichier envoyé.
+**Go through it before any screenshot meant to leave the organisation** —
+public documentation, a support ticket, a release note. An address left in
+a PNG cannot be taken back once the file is sent.
 
-## Naviguer
+## Navigating
 
 ```bash
-gotcha click ".btn-new" --session doc --wait ".modal"   # attend l'écran suivant
+gotcha click ".btn-new" --session doc --wait ".modal"   # waits for the next screen
 gotcha type "#amount" "1240" --session doc --enter
 gotcha press Escape --session doc
 gotcha wait ".spinner-done" --session doc
 gotcha scroll ".footer" --session doc
 ```
 
-## Derrière une authentification
+## Behind a login
 
-La plupart des applications intéressantes demandent une connexion. Ne
-cherchez pas à la franchir vous-même : demandez-la une fois à un humain.
+Most interesting applications ask you to sign in. Do not try to get
+through it yourself: ask a human, once.
 
 ```bash
-gotcha login https://app.exemple.com --session doc   # ouvre une vraie fenêtre
-# … l'utilisateur se connecte à la main, puis :
+gotcha login https://app.example.com --session doc   # opens a real window
+# … the user signs in by hand, then:
 gotcha save-login --session doc --out .gotcha-session.json
 ```
 
-Ensuite, et pour toutes les fois suivantes :
+After that, and for every time that follows:
 
 ```bash
-gotcha open https://app.exemple.com --session doc --storage-state .gotcha-session.json
+gotcha open https://app.example.com --session doc --storage-state .gotcha-session.json
 ```
 
-## Quand un sélecteur échoue
+## When a selector fails
 
-L'échec liste ce qui existe vraiment dans la page et qui ressemble à ce que
-vous avez demandé :
+The failure lists what actually exists in the page and looks like what you
+asked for:
 
 ```
-échec : aucun élément ne correspond à « .invoice » ;
-        présents dans la page : .btn-invoice (×3), #invoices
+failed: no element matches ".invoice";
+        present in the page: .btn-invoice (×3), #invoices
 ```
 
-Prenez la suggestion plutôt que de relire tout le DOM.
+Take the suggestion rather than reading the whole DOM again.
 
-## Enchaîner
+## Running in sequence
 
-Avec `--json`, chaque commande rend une ligne exploitable par un script —
-utile pour produire vingt captures d'une traite :
+With `--json`, every command returns one line a script can use — handy for
+producing twenty screenshots in one go:
 
 ```bash
-for page in factures clients reglages; do
-  gotcha open "https://app.exemple.com/$page" --session doc
+for page in invoices customers settings; do
+  gotcha open "https://app.example.com/$page" --session doc
   gotcha shot --session doc --full-page --out "doc/$page.png" --json
 done
 gotcha close --session doc
 ```
 
-## Quota et licence
+## Quota and licence
 
-La capture, l'annotation et l'export sont libres. Sont comptés ou réservés :
+Capture, annotation and export are free. What is counted or reserved:
 
-| | Gratuit | Sous licence |
+| | Free | Licensed |
 |---|---|---|
-| `gotcha shot` | 20 par jour | illimité |
-| `gotcha login`, `save-login`, `--storage-state` | — | oui |
+| `gotcha shot` | 20 per day | unlimited |
+| `gotcha login`, `save-login`, `--storage-state` | — | yes |
 
-`gotcha license` dit où vous en êtes, en une ligne. Avec `--json`, le champ
-`licensed` tranche sans avoir à lire la phrase.
+`gotcha license` tells you where you stand, in one line. With `--json`, the
+`licensed` field settles it without reading the sentence.
 
-Si une clé vous a été confiée, elle arrive par l'environnement — c'est la
-voie normale pour un agent :
+If a key has been entrusted to you, it arrives through the environment —
+that is the normal route for an agent:
 
 ```bash
 export GOTCHA_LICENSE_KEY="GOTCHA-…"
 ```
 
-Sinon `gotcha activate <clé>` l'enregistre une fois pour toutes sur le poste.
+Otherwise `gotcha activate <key>` records it on the machine once and for all.
 
-**Quand vous butez sur le quota, ne contournez pas et ne recommencez pas** :
-l'échec porte l'adresse d'achat. Rapportez-la à votre interlocuteur humain
-et continuez le reste du travail — les captures déjà prises sont bonnes.
+**When you hit the quota, do not work around it and do not retry**: the
+failure carries the address to buy from. Report it to the human you are
+working with and carry on with the rest — the screenshots already taken
+are good.
 
-### « Licence non activée sur ce poste »
+### "Licence not activated on this device"
 
-Ce message ne dit pas qu'il manque une licence : il dit qu'il manque un
-**lien** entre une licence déjà payée et cette machine. Ne le traitez donc
-pas comme un quota atteint, et surtout n'allez pas réclamer un achat.
+This message does not say a licence is missing. It says a **link** is
+missing, between a licence that has already been paid for and this
+machine. So do not treat it as a spent quota, and above all do not go and
+ask for a purchase.
 
-Il ne concerne que les licences **`pro`**, celles d'un humain. Un pass
-`agent` n'est jamais lié à une machine — il s'exécute dans un conteneur
-neuf à chaque fois, où tout lien serait faux dès la deuxième exécution. Si
-votre clé vient de `GOTCHA_LICENSE_KEY` et que `gotcha license` annonce un
-plan `agent`, ce paragraphe ne vous concerne pas.
+It only concerns **`pro`** licences, the kind a human buys. An `agent`
+pass is never tied to a machine — it runs in a fresh container every time,
+where any link would be wrong by the second run. If your key comes from
+`GOTCHA_LICENSE_KEY` and `gotcha license` reports an `agent` plan, this
+section is not about you.
 
-Sur une licence `pro`, la marche à suivre tient en deux gestes :
+On a `pro` licence, the way out is two commands:
 
 ```bash
-gotcha activate --link     # reprend le lien pour la clé déjà enregistrée
-gotcha license             # et vérifie ce que ça a donné
+gotcha activate --link     # retakes the link for the key already recorded
+gotcha license             # and check what that gave
 ```
 
-**Une seule tentative.** Si elle échoue, la sortie dit laquelle des deux
-choses s'est produite, et une seule vous concerne :
+**One attempt only.** If it fails, the output says which of two things
+happened, and only one of them concerns you:
 
-- **le service est injoignable** — réseau filtré, le plus souvent un proxy
-  d'entreprise. La suite passe par une page web et un copier-coller, donc
-  par un humain. La sortie porte l'identifiant du poste : **transmettez-la
-  telle quelle** à votre interlocuteur, il vous rendra un code à coller
-  avec `gotcha activate <code>` ;
-- **le service refuse** — trop d'activations récentes sur cette clé, ou
-  clé retirée. Rien à faire de votre côté : rapportez, c'est une affaire
-  entre l'acheteur et le support.
+- **the service is unreachable** — a filtered network, usually a corporate
+  proxy. What follows goes through a web page and a copy-paste, so through
+  a human. The output carries the device identifier: **pass it on as it
+  is** to the person you are working with, and they will hand you back a
+  code to paste with `gotcha activate <code>`;
+- **the service refuses** — too many recent activations on that key, or a
+  withdrawn key. Nothing for you to do: report it, this is between the
+  buyer and support.
 
-Dans les deux cas, **continuez le reste du travail**. Les captures déjà
-prises sont bonnes, et le lien manquant n'invalide rien de ce qui est
-fait.
+Either way, **carry on with the rest of the work**. The screenshots
+already taken are good, and a missing link invalidates none of them.
 
-## Filmer, quand une image ne suffit pas
+## Filming, when one image is not enough
 
-**gotcha photographie, il ne filme pas.** Son éditeur vidéo existe, mais il
-repose sur `tabCapture`, qui exige un geste humain : hors de portée d'un
-automate. Pour une capture animée, on pilote Chromium avec Playwright
-(`recordVideo`) et on monte avec le **ffmpeg livré par Playwright**
-(`~/.cache/ms-playwright/ffmpeg-*/ffmpeg-linux`) — build réduit, mais il a
-`crop` et VP8, donc tout ce qu'il faut. Rien à installer.
+**Gotcha photographs, it does not film.** Its video editor exists, but it
+rests on `tabCapture`, which requires a human gesture: out of reach for an
+automated tool. For a moving capture, drive Chromium with Playwright
+(`recordVideo`) and edit with the **ffmpeg Playwright already ships**
+(`~/.cache/ms-playwright/ffmpeg-*/ffmpeg-linux`) — a reduced build, but it
+has `crop` and VP8, so everything needed. Nothing to install.
 
-Filmez seulement un **enchaînement** : ouvrir un sélecteur, choisir, refermer et
-voir le résumé se mettre à jour. Pour un état, une image reste supérieure — plus
-légère, zoomable, indexable.
+Only film a **sequence**: open a picker, choose, close it and watch the
+summary update. For a state, an image is still better — lighter, zoomable,
+indexable.
 
-### Les sept règles, chacune payée par une vidéo ratée
+### The seven rules, each one paid for by a failed video
 
-**1. Un rapport d'image standard, 16:9 ou 4:3.** Un cadre collé au contenu donne
-des bandes de 1046×298 : la vidéo paraît zoomée et le lecteur ne se situe plus
-dans la page. Élargissez jusqu'au rapport voulu, **ne rognez jamais** — vous
-couperiez ce que le cadrage devait montrer.
+**1. A standard aspect ratio, 16:9 or 4:3.** A frame hugging the content
+gives strips of 1046×298: the video looks zoomed in and the viewer can no
+longer place themselves in the page. Widen until you reach the ratio you
+want, **never crop** — you would cut off what the framing was meant to
+show.
 
-**2. Le cadre contient la conséquence, pas seulement le geste.** Une barre
-d'enregistrement en `position: fixed` n'appartient à la boîte d'aucun élément :
-un cadrage serré sur le réglage la laisse dehors, et la vidéo montre quelqu'un
-qui coche une case en croyant avoir fini. Relevez sa position **pendant** le
-geste : mesurée à la fin, elle a déjà disparu.
+**2. The frame holds the consequence, not just the gesture.** A save bar in
+`position: fixed` belongs to no element's box: a frame tight around the
+setting leaves it out, and the video shows someone ticking a box believing
+they are done. Measure its position **during** the gesture: taken at the
+end, it has already gone.
 
-**3. Le geste ne sort jamais du cadre.** Corollaire de la précédente, et plus
-traître : un glisser-déposer a DEUX extrémités. Une vidéo montrait la tuile
-qu'on saisit puis la main qui l'emportait hors champ — on ne voyait jamais
-l'élément atterrir, et le tutoriel enseignait la moitié de son geste. Relevez la
-position de **chaque cible réellement touchée**, avant de jouer le geste (une
-tuile glissée n'est plus à sa place après), et élargissez le cadre jusqu'à les
-contenir toutes. Remettez le relevé à zéro après un défilement, qui invalide
-toutes les positions déjà prises. Si l'action sort du champ, ce n'est jamais
-l'action qui est en tort : c'est le cadrage.
+**3. The gesture never leaves the frame.** A corollary of the previous
+rule, and more treacherous: a drag-and-drop has TWO ends. One video showed
+the tile being picked up and then the hand carrying it out of shot — the
+element was never seen landing, and the tutorial taught half of its own
+gesture. Measure the position of **every target actually touched**, before
+playing the gesture (a dragged tile is no longer where it was), and widen
+the frame until it holds them all. Reset the measurements after a scroll,
+which invalidates every position already taken. If the action leaves the
+frame, the action is never at fault: the framing is.
 
-**4. Le curseur doit être dessiné.** Aucun navigateur ne l'enregistre. Incrustez
-un calque qui suit les événements de pointeur, avec un halo au clic — sans lui,
-les éléments semblent bouger seuls. Attention : pendant un glisser-déposer
-**natif**, le navigateur cesse d'émettre `pointermove` et n'envoie plus que
-`drag`/`dragover`. Écoutez les trois, sinon le curseur se fige au décollage.
+**4. The cursor has to be drawn.** No browser records it. Overlay a layer
+that follows pointer events, with a halo on click — without it, elements
+seem to move on their own. Careful: during a **native** drag-and-drop, the
+browser stops emitting `pointermove` and sends only `drag`/`dragover`.
+Listen for all three, or the cursor freezes at take-off.
 
-**5. Le rythme est celui d'une main.** `locator.click()` téléporte le pointeur :
-les choses réagissent sans que rien ne les ait touchées. Faites voyager la souris
-vers sa cible (une demi-seconde, accélération puis freinage), marquez une
-hésitation avant d'appuyer, et surtout **laissez un temps APRÈS le clic** — c'est
-lui qui laisse voir ce qui a changé. Six cases cochées sans ce temps se cochent
-en un clignement et ne s'apprennent pas.
+**5. The pace is a hand's pace.** `locator.click()` teleports the pointer:
+things react without anything having touched them. Make the mouse travel to
+its target (half a second, accelerating then braking), pause before
+pressing, and above all **leave time AFTER the click** — that is what lets
+the change be seen. Six boxes ticked without it are ticked in a blink and
+teach nothing.
 
-**6. Une seconde d'entrée, deux secondes de sortie, rien qui stagne entre.** Le
-curseur entre dans le cadre depuis un point arbitraire et rejoint sa première
-cible : une vidéo qui s'ouvre sur un clic déjà en cours ne se comprend pas. Et
-elle se termine **deux secondes après le dernier geste** — le temps de voir la
-conséquence : la barre d'enregistrement qui disparaît, le compteur qui change.
-Couper sur le clic laisse croire qu'il ne s'est rien produit. Entre les deux,
-aucun temps mort de plus d'une seconde.
+**6. One second in, two seconds out, nothing idling between.** The cursor
+enters the frame from an arbitrary point and travels to its first target: a
+video that opens on a click already under way cannot be understood. And it
+ends **two seconds after the last gesture** — long enough to see the
+consequence: the save bar disappearing, the counter changing. Cutting on
+the click makes it look as though nothing happened. In between, no dead
+time longer than a second.
 
-**7. Allez jusqu'au bout du geste.** Une vidéo qui s'arrête avant « Enregistrer »
-laisse le lecteur au milieu du gué.
+**7. Go to the end of the gesture.** A video that stops before "Save"
+leaves the viewer midstream.
 
-### Deux pièges qui coûtent des heures
+### Two traps that cost hours
 
-**`-ss` avant `-i` fait une recherche RAPIDE**, qui retombe sur l'image-clé la
-plus proche. Les vidéos de Playwright en ont très peu : la coupe atterrit des
-dizaines de secondes à côté. Mettez `-ss` **après** `-i` — plus lent, exact.
+**`-ss` before `-i` performs a FAST seek**, landing on the nearest
+keyframe. Playwright's videos have very few of them: the cut lands tens of
+seconds away. Put `-ss` **after** `-i` — slower, exact.
 
-**`boundingBox()` attend l'élément — trente secondes par défaut.** Un relevé
-optionnel exécuté après chaque geste gèle donc une demi-minute à chaque fois que
-la cible n'est pas encore là. Une vidéo de six clics durait deux minutes pour
-cette seule raison. Passez toujours `{ timeout: 250 }` à un relevé qui a le droit
-d'échouer.
+**`boundingBox()` waits for the element — thirty seconds by default.** An
+optional measurement run after every gesture therefore freezes for half a
+minute each time the target is not there yet. A six-click video took two
+minutes for that reason alone. Always pass `{ timeout: 250 }` to a
+measurement that is allowed to fail.
 
-## À retenir
+## Worth remembering
 
-- **Une session par parcours**, fermée à la fin (`gotcha close --all` au besoin).
-- **Sélecteurs, pas coordonnées** : une annotation ancrée sur `.save-btn`
-  survit à une refonte de la mise en page ; `620,410` désigne un jour le
-  bouton, le lendemain le vide à côté.
-- **Vérifier avant de capturer**, masquer avant de livrer.
-- **Ne pas transformer côté CDN.** Les opérations Uploadcare (`format/auto`,
-  `quality/smart`, `preview`, `scale_crop`, détection de visages) sont facturées
-  au-delà des cent premières. On cadre à la prise, on dimensionne en CSS, et on
-  sert l'URL brute — y compris pour aller regarder une capture déjà publiée.
-- **Filmer seulement un enchaînement**, au rapport 16:9 ou 4:3, curseur dessiné,
-  rythme humain, sans temps mort — et jusqu'au bout du geste.
+- **One session per journey**, closed at the end (`gotcha close --all` if
+  needed).
+- **Selectors, not coordinates**: an annotation anchored on `.save-btn`
+  survives a layout redesign; `620,410` points at the button one day and at
+  the space beside it the next.
+- **Check before shooting**, mask before delivering.
+- **Only film a sequence**, at a 16:9 or 4:3 ratio, cursor drawn, human
+  pace, no dead time — and all the way to the end of the gesture.
