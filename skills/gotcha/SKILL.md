@@ -156,6 +156,78 @@ Sinon `gotcha activate <clé>` l'enregistre une fois pour toutes sur le poste.
 l'échec porte l'adresse d'achat. Rapportez-la à votre interlocuteur humain
 et continuez le reste du travail — les captures déjà prises sont bonnes.
 
+## Filmer, quand une image ne suffit pas
+
+**gotcha photographie, il ne filme pas.** Son éditeur vidéo existe, mais il
+repose sur `tabCapture`, qui exige un geste humain : hors de portée d'un
+automate. Pour une capture animée, on pilote Chromium avec Playwright
+(`recordVideo`) et on monte avec le **ffmpeg livré par Playwright**
+(`~/.cache/ms-playwright/ffmpeg-*/ffmpeg-linux`) — build réduit, mais il a
+`crop` et VP8, donc tout ce qu'il faut. Rien à installer.
+
+Filmez seulement un **enchaînement** : ouvrir un sélecteur, choisir, refermer et
+voir le résumé se mettre à jour. Pour un état, une image reste supérieure — plus
+légère, zoomable, indexable.
+
+### Les sept règles, chacune payée par une vidéo ratée
+
+**1. Un rapport d'image standard, 16:9 ou 4:3.** Un cadre collé au contenu donne
+des bandes de 1046×298 : la vidéo paraît zoomée et le lecteur ne se situe plus
+dans la page. Élargissez jusqu'au rapport voulu, **ne rognez jamais** — vous
+couperiez ce que le cadrage devait montrer.
+
+**2. Le cadre contient la conséquence, pas seulement le geste.** Une barre
+d'enregistrement en `position: fixed` n'appartient à la boîte d'aucun élément :
+un cadrage serré sur le réglage la laisse dehors, et la vidéo montre quelqu'un
+qui coche une case en croyant avoir fini. Relevez sa position **pendant** le
+geste : mesurée à la fin, elle a déjà disparu.
+
+**3. Le geste ne sort jamais du cadre.** Corollaire de la précédente, et plus
+traître : un glisser-déposer a DEUX extrémités. Une vidéo montrait la tuile
+qu'on saisit puis la main qui l'emportait hors champ — on ne voyait jamais
+l'élément atterrir, et le tutoriel enseignait la moitié de son geste. Relevez la
+position de **chaque cible réellement touchée**, avant de jouer le geste (une
+tuile glissée n'est plus à sa place après), et élargissez le cadre jusqu'à les
+contenir toutes. Remettez le relevé à zéro après un défilement, qui invalide
+toutes les positions déjà prises. Si l'action sort du champ, ce n'est jamais
+l'action qui est en tort : c'est le cadrage.
+
+**4. Le curseur doit être dessiné.** Aucun navigateur ne l'enregistre. Incrustez
+un calque qui suit les événements de pointeur, avec un halo au clic — sans lui,
+les éléments semblent bouger seuls. Attention : pendant un glisser-déposer
+**natif**, le navigateur cesse d'émettre `pointermove` et n'envoie plus que
+`drag`/`dragover`. Écoutez les trois, sinon le curseur se fige au décollage.
+
+**5. Le rythme est celui d'une main.** `locator.click()` téléporte le pointeur :
+les choses réagissent sans que rien ne les ait touchées. Faites voyager la souris
+vers sa cible (une demi-seconde, accélération puis freinage), marquez une
+hésitation avant d'appuyer, et surtout **laissez un temps APRÈS le clic** — c'est
+lui qui laisse voir ce qui a changé. Six cases cochées sans ce temps se cochent
+en un clignement et ne s'apprennent pas.
+
+**6. Une seconde d'entrée, deux secondes de sortie, rien qui stagne entre.** Le
+curseur entre dans le cadre depuis un point arbitraire et rejoint sa première
+cible : une vidéo qui s'ouvre sur un clic déjà en cours ne se comprend pas. Et
+elle se termine **deux secondes après le dernier geste** — le temps de voir la
+conséquence : la barre d'enregistrement qui disparaît, le compteur qui change.
+Couper sur le clic laisse croire qu'il ne s'est rien produit. Entre les deux,
+aucun temps mort de plus d'une seconde.
+
+**7. Allez jusqu'au bout du geste.** Une vidéo qui s'arrête avant « Enregistrer »
+laisse le lecteur au milieu du gué.
+
+### Deux pièges qui coûtent des heures
+
+**`-ss` avant `-i` fait une recherche RAPIDE**, qui retombe sur l'image-clé la
+plus proche. Les vidéos de Playwright en ont très peu : la coupe atterrit des
+dizaines de secondes à côté. Mettez `-ss` **après** `-i` — plus lent, exact.
+
+**`boundingBox()` attend l'élément — trente secondes par défaut.** Un relevé
+optionnel exécuté après chaque geste gèle donc une demi-minute à chaque fois que
+la cible n'est pas encore là. Une vidéo de six clics durait deux minutes pour
+cette seule raison. Passez toujours `{ timeout: 250 }` à un relevé qui a le droit
+d'échouer.
+
 ## À retenir
 
 - **Une session par parcours**, fermée à la fin (`gotcha close --all` au besoin).
@@ -163,3 +235,9 @@ et continuez le reste du travail — les captures déjà prises sont bonnes.
   survit à une refonte de la mise en page ; `620,410` désigne un jour le
   bouton, le lendemain le vide à côté.
 - **Vérifier avant de capturer**, masquer avant de livrer.
+- **Ne pas transformer côté CDN.** Les opérations Uploadcare (`format/auto`,
+  `quality/smart`, `preview`, `scale_crop`, détection de visages) sont facturées
+  au-delà des cent premières. On cadre à la prise, on dimensionne en CSS, et on
+  sert l'URL brute — y compris pour aller regarder une capture déjà publiée.
+- **Filmer seulement un enchaînement**, au rapport 16:9 ou 4:3, curseur dessiné,
+  rythme humain, sans temps mort — et jusqu'au bout du geste.
