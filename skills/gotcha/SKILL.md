@@ -9,6 +9,10 @@ A human frames with the mouse. You cannot see the screen: you point with a
 **CSS selector**, and Gotcha turns it into pixels. Every annotation target
 accepts a selector; that is the normal way to use it.
 
+**Write deliverables in the language of the request** — annotation text,
+file names and the prose around them included. This page is in English
+because it ships worldwide; what you produce with it is not.
+
 ## The basic move
 
 ```bash
@@ -273,5 +277,7 @@ measurement that is allowed to fail.
   survives a layout redesign; `620,410` points at the button one day and at
   the space beside it the next.
 - **Check before shooting**, mask before delivering.
+- **Deliverables follow the language of the request**, not the language of
+  this page.
 - **Only film a sequence**, at a 16:9 or 4:3 ratio, cursor drawn, human
   pace, no dead time — and all the way to the end of the gesture.
