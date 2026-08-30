@@ -156,6 +156,41 @@ Sinon `gotcha activate <clé>` l'enregistre une fois pour toutes sur le poste.
 l'échec porte l'adresse d'achat. Rapportez-la à votre interlocuteur humain
 et continuez le reste du travail — les captures déjà prises sont bonnes.
 
+### « Licence non activée sur ce poste »
+
+Ce message ne dit pas qu'il manque une licence : il dit qu'il manque un
+**lien** entre une licence déjà payée et cette machine. Ne le traitez donc
+pas comme un quota atteint, et surtout n'allez pas réclamer un achat.
+
+Il ne concerne que les licences **`pro`**, celles d'un humain. Un pass
+`agent` n'est jamais lié à une machine — il s'exécute dans un conteneur
+neuf à chaque fois, où tout lien serait faux dès la deuxième exécution. Si
+votre clé vient de `GOTCHA_LICENSE_KEY` et que `gotcha license` annonce un
+plan `agent`, ce paragraphe ne vous concerne pas.
+
+Sur une licence `pro`, la marche à suivre tient en deux gestes :
+
+```bash
+gotcha activate --link     # reprend le lien pour la clé déjà enregistrée
+gotcha license             # et vérifie ce que ça a donné
+```
+
+**Une seule tentative.** Si elle échoue, la sortie dit laquelle des deux
+choses s'est produite, et une seule vous concerne :
+
+- **le service est injoignable** — réseau filtré, le plus souvent un proxy
+  d'entreprise. La suite passe par une page web et un copier-coller, donc
+  par un humain. La sortie porte l'identifiant du poste : **transmettez-la
+  telle quelle** à votre interlocuteur, il vous rendra un code à coller
+  avec `gotcha activate <code>` ;
+- **le service refuse** — trop d'activations récentes sur cette clé, ou
+  clé retirée. Rien à faire de votre côté : rapportez, c'est une affaire
+  entre l'acheteur et le support.
+
+Dans les deux cas, **continuez le reste du travail**. Les captures déjà
+prises sont bonnes, et le lien manquant n'invalide rien de ce qui est
+fait.
+
 ## Filmer, quand une image ne suffit pas
 
 **gotcha photographie, il ne filme pas.** Son éditeur vidéo existe, mais il
