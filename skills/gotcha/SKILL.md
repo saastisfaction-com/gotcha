@@ -39,7 +39,7 @@ costs almost nothing.
 
 | Option | Effect |
 |---|---|
-| `--selector "#invoices"` | the element named, with `--padding 16` around it |
+| `--selector "#invoices"` | the element named, with `--padding 12` around it (change it with `--padding <px>`) |
 | `--region "0,0,900,400"` | a rectangle, when nothing in the DOM will do |
 | `--full-page` | the whole page, scrolling included |
 | *(nothing)* | the visible part |
@@ -121,6 +121,34 @@ failed: no element matches ".invoice";
 ```
 
 Take the suggestion rather than reading the whole DOM again.
+
+## Four things that each cost an agent a round
+
+- **The window size is fixed when the session opens.** `gotcha open` on a
+  session that is already alive navigates, but ignores `--width`,
+  `--height` and `--scale`. To change the size, `gotcha close` and open
+  again. And the viewport is a little smaller than the window (the
+  browser's own bar takes ~90 px): for a card 900 px tall, ask for 1000.
+- **A `--selector` shot scrolls the element into view, and the page stays
+  there.** A viewport shot taken right after starts from that scroll
+  position. `gotcha scroll 0` puts the page back at the top.
+- **`--blur` on a selector that matches nothing refuses the whole shot**,
+  rather than silently masking nothing — a mask that did not apply is
+  the failure you must not miss. On a screen without the data, drop the
+  option.
+- **`--rect`, `--ellipse`, `--arrow`, `--step` and `--text` take the first
+  match; `--blur` takes them all.** To frame every row, repeat the option
+  or use a more specific selector.
+
+## Documenting a Chrome extension
+
+`gotcha open <url> --extension ./dist` loads an unpacked extension into
+the session. Its pages (`chrome-extension://…/options.html`) and whatever
+it injects into the tab are then ordinary targets for `gotcha shot`. It
+needs a Chrome for Testing (`npx playwright install chromium`), found by
+itself in Playwright's cache; Chrome stable ignores `--load-extension`
+since version 137. A closed shadow root stays invisible to selectors — if
+you own the extension, open it in the copy you use for the shoot.
 
 ## Running in sequence
 
