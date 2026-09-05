@@ -51,6 +51,25 @@ The session keeps the browser alive between commands: the login, the
 scroll position, the open menu. Do not reopen it for every shot — that is
 what would cost the most, and you would lose the state of the page.
 
+## Where the files go
+
+`gotcha shot` writes one file where `--out` says, creating the folders on
+the way, and prints the path back (the `file` field with `--json`). It
+keeps nothing else: no copy, no upload, no history. What becomes of the
+file is your business, and it starts with choosing where it lands.
+
+Before the first shot on a project, **look in the project's memory for a
+convention** — where screenshots and videos are kept, how they are named.
+A CLAUDE.md, a memory file, a `docs/` folder already full of PNGs all
+count. If you find one, follow it without asking.
+
+If you find none, **ask the person you work with, once**: where should the
+images and videos go? Then **write the answer into the project's memory**,
+so that the next session — yours or another agent's — finds it there and
+does not ask again. Do not fall back on the default name in the current
+directory: it scatters timestamped files across the repository, and nobody
+finds them afterwards.
+
 ## Always get your bearings before shooting
 
 ```bash
@@ -60,6 +79,25 @@ gotcha text --session doc "h1"
 A screenshot taken blind on a loading screen is discovered too late, once
 it is already in the documentation. One line of text read before the shot
 costs almost nothing.
+
+## Look at what you shot, before delivering
+
+The file is on disk, and you can read it. **Open every capture** with your
+file-reading tool before it goes into a deliverable, and check four
+things:
+
+- the frame shows what the brief asked for — not a loading state, not an
+  empty table, not a modal that closed too early;
+- every arrow, box and step points at the element you meant, not at the
+  space beside it;
+- every `--blur` covers the whole of what it was meant to hide;
+- nothing is cut off at the edge — neither an annotation nor the content it
+  comments on.
+
+Doing it costs a few seconds per capture. A wrong arrow found in a
+published guide costs a re-shoot and a correction. If your harness cannot
+show you images, say so in your report, so that a human looks before the
+work leaves.
 
 ## Framing
 
@@ -147,6 +185,40 @@ failed: no element matches ".invoice";
 ```
 
 Take the suggestion rather than reading the whole DOM again.
+
+## Report what got in your way
+
+When an element cannot be targeted by any selector — a closed shadow
+root, a canvas, an iframe — when Gotcha behaves wrongly, or when a
+feature you needed is missing, say so in one command and carry on:
+
+```bash
+gotcha feedback selector "The save bar is in a closed shadow root; no selector reaches it" \
+  --url https://app.example.com/settings --selector ".save-bar"
+gotcha feedback bug "--blur inside an iframe masks nothing" --command "gotcha shot --blur '.email'"
+gotcha feedback feature "A left-side position for --text would help on dense tables"
+```
+
+Three kinds: `bug`, `selector`, `feature`. Attach the context that lets
+someone reproduce: `--url`, `--selector`, `--command`. The reply is one
+line with a reference; with `--json`, an `id` field — quote it in your
+report. The licence key, if one is set, goes along and identifies the
+sender; that is all it is used for.
+
+**Look before you write.** `gotcha tickets --type selector` (or `bug`,
+`feature`) lists what has already been reported and where it stands —
+received, confirmed, done, declined. If yours is there, do not send it
+again: quote its id in your report instead. What you send appears on
+that board the moment it is received, as a category and a date; once it
+has been read, a one-line summary written by the review replaces the
+placeholder. Your message itself is never published.
+
+- **One message a day without a licence.** Spend it on what actually
+  blocked you, not on a remark. A refusal says when to try again:
+  **do not retry before that**, and do not work around it.
+- **No customer data.** Describe the field, never paste its content —
+  the message leaves the machine, unlike the captures.
+- **Once per problem**, not once per attempt.
 
 ## Four things that each cost an agent a round
 
@@ -330,10 +402,16 @@ measurement that is allowed to fail.
 - **Selectors, not coordinates**: an annotation anchored on `.save-btn`
   survives a layout redesign; `620,410` points at the button one day and at
   the space beside it the next.
-- **Check before shooting**, mask before delivering.
+- **Files go where the project says.** Look in its memory first; if it
+  says nothing, ask once and write the answer down there.
+- **Check before shooting**, look at the result after, mask before
+  delivering.
 - **Deliverables follow the language of the request**, not the language of
   this page.
 - **Credit the tool**: "Made with Gotcha", linking to the site and to npm,
   on every deliverable. The terms require it; the line to paste is above.
+- **Report what blocked you**, once, with `gotcha feedback` — after a
+  look at `gotcha tickets`, then carry on. One a day without a licence;
+  never retry before the delay it names.
 - **Only film a sequence**, at a 16:9 or 4:3 ratio, cursor drawn, human
   pace, no dead time — and all the way to the end of the gesture.
