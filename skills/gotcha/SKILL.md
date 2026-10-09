@@ -335,7 +335,7 @@ Only film a **sequence**: open a picker, choose, close it and watch the
 summary update. For a state, an image is still better — lighter, zoomable,
 indexable.
 
-### The seven rules, each one paid for by a failed video
+### The eight rules, each one paid for by a failed video
 
 **1. A standard aspect ratio, 16:9 or 4:3.** A frame hugging the content
 gives strips of 1046×298: the video looks zoomed in and the viewer can no
@@ -383,6 +383,20 @@ time longer than a second.
 **7. Go to the end of the gesture.** A video that stops before "Save"
 leaves the viewer midstream.
 
+**8. Every interaction is performed on camera, the way a hand would.**
+`locator.fill()` drops a value into a field in zero frames: the video shows
+a form that fills itself, then the pointer heading straight for "Save". A
+viewer saw "hyrox beginner" already typed without anyone typing it, and a
+colour, a duration and a description nobody touched — the tutorial taught
+the result, not the gesture. Move the pointer to the field, click it (the
+focus shows), type key by key at a human rhythm, then move on. The same
+for a date (open the picker, click the day), a colour (open the picker,
+choose), a dropdown (open, pick), a checkbox (tick under the cursor), and
+**each step of a multi-step dialog** — the click that moves to the next
+step is part of the scene, never skipped off camera. Silent setters are for
+staging and for restoring the state afterwards, outside the cut; any value
+the tutorial announces is entered in shot.
+
 ### Two traps that cost hours
 
 **`-ss` before `-i` performs a FAST seek**, landing on the nearest
@@ -415,3 +429,6 @@ measurement that is allowed to fail.
   never retry before the delay it names.
 - **Only film a sequence**, at a 16:9 or 4:3 ratio, cursor drawn, human
   pace, no dead time — and all the way to the end of the gesture.
+- **Every input is performed on camera**: pointer to the field, click,
+  type key by key, pick the date or colour, step through each screen of a
+  dialog. Silent setters stay outside the cut.
