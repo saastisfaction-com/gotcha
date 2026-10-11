@@ -51,6 +51,11 @@ The session keeps the browser alive between commands: the login, the
 scroll position, the open menu. Do not reopen it for every shot — that is
 what would cost the most, and you would lose the state of the page.
 
+If the shell answers `gotcha: command not found`, the command-line tool is
+not on this machine yet — this skill can arrive on its own, as a plugin.
+Install it once, `npm install -g @saastisfaction/gotcha` (it needs Node 20+
+and a Google Chrome), and say in your report that you did.
+
 ## Where the files go
 
 `gotcha shot` writes one file where `--out` says, creating the folders on
