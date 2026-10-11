@@ -1,0 +1,15 @@
+{
+  "name": "saastisfaction",
+  "description": "Gotcha — annotated screenshots of any web app, for an agent that documents a screen it cannot see.",
+  "owner": {
+    "name": "Étienne Sanquer",
+    "url": "https://saastisfaction.com"
+  },
+  "plugins": [
+    {
+      "name": "gotcha",
+      "source": "./",
+      "description": "Annotated screenshots of any web app, by CSS selector — for an agent that documents a screen it cannot see."
+    }
+  ]
+}

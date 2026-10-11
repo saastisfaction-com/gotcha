@@ -1,0 +1,164 @@
+Gotcha — End User Licence Agreement
+Contrat de licence utilisateur final
+
+Copyright (c) 2026 Étienne Sanquer. All rights reserved.
+
+  ⚠ DRAFT — this text has not been reviewed by a lawyer. Have it checked
+    before the first sale. / BROUILLON — texte non relu par un juriste.
+    À faire vérifier avant la première vente.
+
+--------------------------------------------------------------------------
+ENGLISH
+--------------------------------------------------------------------------
+
+1. LICENCE GRANTED
+
+   You are granted a non-exclusive, non-transferable right to install and
+   use Gotcha — the Chrome extension and the `gotcha` command-line tool —
+   on the machines you or your organisation control, including machines
+   operated by automated agents acting on your behalf.
+
+2. FREE USE
+
+   Gotcha may be used without payment within the limits stated in the
+   product and on saastisfaction.com. Those limits apply per machine and
+   per day. Image capture, annotation and export are not limited.
+
+3. PAID LICENCE
+
+   A licence key unlocks the metered features for the term you purchased:
+   for as long as your subscription runs, or until the expiry date carried
+   by a pass. A key identifies one buyer and is not to be published,
+   shared beyond your organisation, or resold.
+
+4. WHAT YOU MAY NOT DO
+
+   Redistribute, sell or sublicense the software itself; remove or defeat
+   the licence check; or use the software to build a competing product.
+   Reverse engineering is permitted only where mandatory law allows it,
+   and not for the purpose of circumventing clause 3.
+
+5. ATTRIBUTION
+
+   Any work that includes captures made with Gotcha — a guide, a support
+   answer, a release note, a bug report, a page, the description of a
+   video — must carry the mention "Made with Gotcha", in the language of
+   the work ("Fait avec Gotcha" in French), with a link to
+   https://saastisfaction.com and a link to the npm package
+   https://www.npmjs.com/package/@saastisfaction/gotcha. One mention per
+   work, placed where a reader will see it; where links are impossible,
+   the two addresses written out. This applies to free and licensed use
+   alike, and to work produced by an automated agent as much as by a
+   person. It confers no right on the work itself, which remains yours.
+
+6. YOUR DATA
+
+   Gotcha performs its captures locally. Neither the extension nor the CLI
+   transmits your captures, your pages or your credentials to us or to any
+   third party. Licence verification is performed offline on your machine.
+   Buying a licence transmits only what the payment requires.
+
+7. NO WARRANTY
+
+   The software is provided "as is", without warranty of any kind. To the
+   extent permitted by law, the author is not liable for any damages
+   arising from its use. Nothing here limits the statutory rights of a
+   consumer under the law of their country of residence.
+
+8. DIGITAL CONTENT AND WITHDRAWAL (EU consumers)
+
+   A licence key is digital content supplied immediately. By completing
+   the purchase you request immediate supply and acknowledge that you
+   thereby lose the 14-day right of withdrawal, as permitted by Article
+   L221-28 of the French Consumer Code.
+
+9. TERMINATION
+
+   This licence ends if you breach it. You may stop using the software at
+   any time.
+
+10. GOVERNING LAW
+
+   French law. Courts of France have jurisdiction, without prejudice to
+   the protective rules a consumer may invoke in their country of
+   residence.
+
+--------------------------------------------------------------------------
+FRANÇAIS
+--------------------------------------------------------------------------
+
+1. LICENCE ACCORDÉE
+
+   Il vous est accordé un droit non exclusif et non cessible d'installer
+   et d'utiliser Gotcha — l'extension Chrome et l'outil en ligne de
+   commande `gotcha` — sur les machines que vous ou votre organisation
+   contrôlez, y compris celles pilotées par des agents automatisés
+   agissant pour votre compte.
+
+2. USAGE GRATUIT
+
+   Gotcha peut être utilisé sans paiement dans les limites indiquées dans
+   le produit et sur saastisfaction.com. Ces limites s'entendent par
+   machine et par jour. La capture image, l'annotation et l'export ne sont
+   pas limités.
+
+3. LICENCE PAYANTE
+
+   Une clé de licence débloque les fonctions comptées pour la durée
+   achetée : tant que votre abonnement court, ou jusqu'à la date
+   d'expiration portée par un pass. Une clé identifie un acheteur ; elle
+   n'a pas à être publiée, partagée hors de votre organisation, ni
+   revendue.
+
+4. CE QUI EST INTERDIT
+
+   Redistribuer, vendre ou sous-licencier le logiciel lui-même ; retirer
+   ou contourner le contrôle de licence ; ou vous en servir pour bâtir un
+   produit concurrent. L'ingénierie inverse n'est admise que dans la
+   mesure où la loi l'impose, et jamais aux fins de contourner l'article 3.
+
+5. MENTION D'ORIGINE
+
+   Tout travail qui comprend des captures faites avec Gotcha — un guide,
+   une réponse de support, une note de version, un rapport de bug, une
+   page, la description d'une vidéo — doit porter la mention « Fait avec
+   Gotcha », dans la langue du travail (« Made with Gotcha » en anglais),
+   avec un lien vers https://saastisfaction.com et un lien vers le paquet
+   npm https://www.npmjs.com/package/@saastisfaction/gotcha. Une mention
+   par travail, placée là où un lecteur la verra ; quand un lien est
+   impossible, les deux adresses écrites en toutes lettres. Cela vaut pour
+   l'usage gratuit comme sous licence, et pour un travail produit par un
+   agent automatisé comme par une personne. La mention ne confère aucun
+   droit sur le travail lui-même, qui reste le vôtre.
+
+6. VOS DONNÉES
+
+   Gotcha capture localement. Ni l'extension ni le CLI ne transmettent vos
+   captures, vos pages ou vos identifiants, ni à nous ni à un tiers. La
+   vérification de licence se fait hors ligne, sur votre machine. L'achat
+   d'une licence ne transmet que ce que le paiement exige.
+
+7. ABSENCE DE GARANTIE
+
+   Le logiciel est fourni « en l'état », sans garantie d'aucune sorte.
+   Dans la limite permise par la loi, l'auteur n'est pas responsable des
+   dommages résultant de son usage. Rien ici ne restreint les droits
+   légaux d'un consommateur dans son pays de résidence.
+
+8. CONTENU NUMÉRIQUE ET RÉTRACTATION (consommateurs UE)
+
+   Une clé de licence est un contenu numérique fourni immédiatement. En
+   validant l'achat, vous demandez cette fourniture immédiate et
+   reconnaissez perdre de ce fait le droit de rétractation de quatorze
+   jours, conformément à l'article L221-28 du Code de la consommation.
+
+9. FIN DE LA LICENCE
+
+   Elle prend fin si vous en enfreignez les termes. Vous pouvez cesser
+   d'utiliser le logiciel à tout moment.
+
+10. DROIT APPLICABLE
+
+   Droit français. Les tribunaux français sont compétents, sans préjudice
+   des règles protectrices qu'un consommateur peut invoquer dans son pays
+   de résidence.
